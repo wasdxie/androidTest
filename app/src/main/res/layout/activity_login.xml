@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical"
+    android:gravity="center"
+
+    >
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/logo"
+        android:src="@mipmap/logo"
+        android:layout_marginTop="50dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="斑马+"
+        />
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="end"
+            android:dividerPadding="10dp"
+            >
+            <EditText
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:hint="请填写手机号码"
+                android:background="@null"
+                android:id="@+id/phone"
+                android:focusable="true"
+                android:inputType="number"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/login_sms_tv"
+            android:background="@color/gray_1" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:dividerPadding="10dp"
+            >
+            <EditText
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:hint="输入图片验证码"
+                android:background="@null"
+                android:id="@+id/code"
+                android:focusable="true"
+                android:inputType="text"
+                />
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:id = "@+id/codeImage"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/login_sms_tv"
+            android:background="@color/gray_1" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:divider="@drawable/divider"
+            android:showDividers="middle"
+            android:dividerPadding="10dp"
+            >
+            <EditText
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:hint="输入验证码"
+                android:background="@null"
+                android:id="@+id/phoneCode"
+                android:focusable="true"
+                android:inputType="number"
+                />
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:text="发送验证码"
+                android:id="@+id/sendCode"
+                />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/login_sms_tv"
+            android:background="@color/gray_1" />
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="45dp"
+            android:text="验证"
+            android:layout_marginTop="50dp"
+            android:id="@+id/login"
+            />
+    </LinearLayout>
+
+</LinearLayout>

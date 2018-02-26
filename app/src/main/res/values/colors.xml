@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="account_line">#FF4081</color>
     <color name="gray_1">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="color1">#EFEFEF</color>
 </resources>

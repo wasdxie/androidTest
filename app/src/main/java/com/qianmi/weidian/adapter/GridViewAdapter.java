@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.qianmi.weidian.R;
 import com.qianmi.weidian.bean.GridItem;
 
@@ -50,6 +53,15 @@ public class GridViewAdapter extends ArrayAdapter<GridItem> {
         }
         GridItem item = mGridData.get(position);
         holder.textView.setText(item.getTitle());
+        RequestOptions options = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .fitCenter()
+                .dontAnimate();
+        Glide.with(mContext)
+                .load(item.getImage())
+                .apply(options)
+                .thumbnail(0.1f)
+                .into(holder.imageView);
         return convertView;
     }
 

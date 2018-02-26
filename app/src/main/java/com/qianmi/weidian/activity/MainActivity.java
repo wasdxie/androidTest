@@ -5,16 +5,34 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.qianmi.weidian.R;
+import com.qianmi.weidian.adapter.GridViewAdapter;
+import com.qianmi.weidian.bean.GridItem;
+import com.qianmi.weidian.domain.BaseResponse;
+import com.qianmi.weidian.domain.ProductBo;
+import com.qianmi.weidian.domain.ProductList;
+import com.qianmi.weidian.util.BizNetworkHelp;
+import com.qianmi.weidian.util.GsonHelper;
+import com.qianmi.weidian.util.HttpNetwork;
 import com.qianmi.weidian.util.LogUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +40,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.qianmi.weidian.base.Constant.INTERFACE_URL;
 
 public class MainActivity extends Activity {
 
@@ -34,7 +55,9 @@ public class MainActivity extends Activity {
 
     private List<View> list_view = new ArrayList<View>();
 
-    private ImagePageAdapter imagePageAdapter;
+    private List<View> product_list_view = new ArrayList<View>();
+
+    private MyPageAdapter imagePageAdapter;
 
     // 带颜色的引导点
     ImageView img_colorPoint;
@@ -43,16 +66,22 @@ public class MainActivity extends Activity {
 
     LinearLayout layout_point;
 
+    private List<ProductBo> productBos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imagePager = findViewById(R.id.imagePager);
         layout_point = findViewById(R.id.layout_point);
+        productPager = findViewById(R.id.productPager);
         initImageViewPager();
+        initProductViewPager();
     }
 
-
+    /**
+     * 初始化图片轮播
+     * */
     private void initImageViewPager(){
         LayoutInflater inflater = LayoutInflater.from(this);
         View view1 = inflater.inflate(R.layout.main_image,null);
@@ -82,15 +111,84 @@ public class MainActivity extends Activity {
             layout_point.addView(point);
         }
 
-        imagePageAdapter = new ImagePageAdapter(list_view);
+        imagePageAdapter = new MyPageAdapter(list_view);
         imagePager.setAdapter(imagePageAdapter);
         imagePager.addOnPageChangeListener(new ImageSimpleOnPageChangeListener());
     }
-    public class ImagePageAdapter extends PagerAdapter {
+
+
+    /**
+     * 初始化产品轮播
+     * */
+    private void initProductViewPager(){
+        HashMap<String,Object> params = new HashMap<>();
+        params.put("duserCode","DP00004");
+        BizNetworkHelp.getInstance().postAsyncHttpJson(INTERFACE_URL+"/microstore/product/queryProductList",params, new BizNetworkHelp.NetworkCallBack() {
+            @Override
+            public void onSuccess(Object obj) {
+                String result = obj.toString();
+                JSONObject jsonObject;
+               final BaseResponse<ProductList> baseResponse = GsonHelper.getInstance().fromJson(result,BaseResponse.class);
+                String data = GsonHelper.getInstance().toJson(baseResponse.getData());
+                 ProductList productList = GsonHelper.getInstance().fromJson(data,ProductList.class);
+                productBos = productList.getProductBos();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initProuctPager();
+                    }
+                });
+
+                LogUtils.d(TAG,result);
+            }
+
+            @Override
+            public void onFailure(Object obj) {
+
+            }
+        });
+    }
+    
+    private void initProuctPager(){
+        int everyCount = 8; //每页的产品数量
+        int count = 0;
+        if(productBos != null){
+            int size = productBos.size();
+            int mod = size%8;
+            count = mod == 0?size/8:((size - mod)/8 +1);
+            for(int i =0;i<count;i++){
+                LayoutInflater inflater = LayoutInflater.from(this);
+                View view = inflater.inflate(R.layout.product_page,null);
+                GridView gridView = view.findViewById(R.id.gridview);
+                ArrayList<GridItem> arrayList = new ArrayList<>();
+                //初始化数据源
+                for(int j=0;j<8;j++){
+                    int current = j+8*i;
+                    if(current < size){
+                        ProductBo productBo = productBos.get(j+8*i);
+                        GridItem girdItem = new GridItem();
+                        girdItem.setImage(productBo.getIcon());
+                        girdItem.setTitle(productBo.getName());
+                        girdItem.setProductBo(productBo);
+                        arrayList.add(girdItem);
+                    }else {
+                        break;
+                    }
+                }
+                GridViewAdapter gridViewAdapter = new GridViewAdapter(this,R.layout.product_page_item,arrayList);
+                gridView.setAdapter(gridViewAdapter);
+                product_list_view.add(view);
+            }
+            productPager.setAdapter(new MyPageAdapter(product_list_view));
+
+        }
+    }
+
+    public class MyPageAdapter extends PagerAdapter {
 
         private List<View> views;
 
-        public ImagePageAdapter(List<View> list) {
+        public MyPageAdapter(List<View> list) {
             super();
             this.views = list;
         }
@@ -122,7 +220,7 @@ public class MainActivity extends Activity {
             return arg0 == arg1;
         }
     }
-
+    
 
     private void beginDownImage(final String url,final ImageView imageView){
         new Thread(new Runnable() {

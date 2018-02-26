@@ -5,10 +5,8 @@ package com.qianmi.weidian.base;
  */
 public class Constant {
 
-    public static String WX_APPID = "wx085a8685d1892707";
-    public static String NAME = "KEY_NAME";
-    public static String CHILD_ROUTE = "Child_Route";
-    public static String ENV_ID = "ENV_ID";
+    public static String INTERFACE_URL="https://gatewaytest.bm001.com/";
+
     public static String TTF_VERSION = "TTF_VERSION";
 
     public static String ISLOGIN = "ISLOGIN";
@@ -59,5 +57,7 @@ public class Constant {
         public static final String SUCCESS = "ok";
         public static final String FAIL = "fail";
     }
+
+
 
 }

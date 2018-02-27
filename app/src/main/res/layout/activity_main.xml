@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="#eeeeee"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     >
 
     <RelativeLayout
@@ -27,8 +28,11 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="-10dp"
+        android:id="@+id/reProduct"
+        >
         <android.support.v4.view.ViewPager
             android:id="@+id/productPager"
             android:layout_width="match_parent"

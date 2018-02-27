@@ -1,6 +1,7 @@
 package com.qianmi.weidian.activity;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -8,13 +9,16 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -66,6 +70,8 @@ public class MainActivity extends Activity {
 
     LinearLayout product_point;
 
+    RelativeLayout reProduct;
+
     private List<ProductBo> productBos;
 
     @Override
@@ -76,8 +82,27 @@ public class MainActivity extends Activity {
         layout_point = findViewById(R.id.layout_point);
         productPager = findViewById(R.id.productPager);
         product_point = findViewById(R.id.product_point);
+        reProduct = findViewById(R.id.reProduct);
+
         initImageViewPager();
         initProductViewPager();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        WindowManager wm1 = this.getWindowManager();
+        int width1 = wm1.getDefaultDisplay().getWidth();
+        int height = reProduct.getHeight();
+        Resources resources = this.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        int density = (int)dm.density;
+        int width = dm.widthPixels;
+        int height1 = dm.heightPixels;
+        LinearLayout.LayoutParams layoutParams11 = new LinearLayout.LayoutParams(width1-20,(int)density*150);
+        layoutParams11.setMargins(0,density*(-10),0,0);
+        reProduct.setLayoutParams(layoutParams11);
+        reProduct.invalidate();
     }
 
     /**

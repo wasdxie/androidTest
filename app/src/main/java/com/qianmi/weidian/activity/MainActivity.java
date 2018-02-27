@@ -62,9 +62,9 @@ public class MainActivity extends Activity {
     // 带颜色的引导点
     ImageView img_colorPoint;
 
-    List<ImageView> list_pointView = new ArrayList<ImageView>();
-
     LinearLayout layout_point;
+
+    LinearLayout product_point;
 
     private List<ProductBo> productBos;
 
@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
         imagePager = findViewById(R.id.imagePager);
         layout_point = findViewById(R.id.layout_point);
         productPager = findViewById(R.id.productPager);
+        product_point = findViewById(R.id.product_point);
         initImageViewPager();
         initProductViewPager();
     }
@@ -98,22 +99,11 @@ public class MainActivity extends Activity {
         list_view.add(view3);
 
         //添加引导点
-        for (int i = 0; i < list_view.size(); i++) {
-            ImageView point = new ImageView(this);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(10,10);
-            layoutParams.setMargins(10,0,10,0);
-            point.setLayoutParams(layoutParams);
-
-            //设置暗点
-            point.setBackgroundResource(R.color.gray_1);
-
-            list_pointView.add(point);
-            layout_point.addView(point);
-        }
+        initPoint(layout_point,list_view.size());
 
         imagePageAdapter = new MyPageAdapter(list_view);
         imagePager.setAdapter(imagePageAdapter);
-        imagePager.addOnPageChangeListener(new ImageSimpleOnPageChangeListener());
+        imagePager.addOnPageChangeListener(new ImageSimpleOnPageChangeListener(layout_point));
     }
 
 
@@ -180,6 +170,9 @@ public class MainActivity extends Activity {
                 product_list_view.add(view);
             }
             productPager.setAdapter(new MyPageAdapter(product_list_view));
+            //添加引导点
+            initPoint(product_point,count);
+            productPager.addOnPageChangeListener(new ImageSimpleOnPageChangeListener(product_point));
 
         }
     }
@@ -259,12 +252,19 @@ public class MainActivity extends Activity {
     }
 
     class ImageSimpleOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
+
+        LinearLayout container;
+
+        public ImageSimpleOnPageChangeListener(LinearLayout container){
+            this.container = container;
+        }
+
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             // This space for rent
            int count =  3;
             for(int i=0;i<count;i++){
-               final ImageView imageView = (ImageView) layout_point.getChildAt(i);
+               final ImageView imageView = (ImageView) container.getChildAt(i);
                int color = R.color.colorAccent;
                 if(i == position){
                     color = R.color.colorPrimary;
@@ -292,6 +292,24 @@ public class MainActivity extends Activity {
                     imageView.setBackgroundResource(color);
                 }
             });
+        }
+    }
+
+
+    /**
+     * 添加引导点
+     * */
+    private void initPoint(LinearLayout container,int childLength){
+        for (int i = 0; i < childLength; i++) {
+            ImageView point = new ImageView(this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(10,10);
+            layoutParams.setMargins(10,0,10,0);
+            point.setLayoutParams(layoutParams);
+
+            //设置暗点
+            point.setBackgroundResource(R.color.gray_1);
+
+            container.addView(point);
         }
     }
 

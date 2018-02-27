@@ -52,16 +52,18 @@ public class GridViewAdapter extends ArrayAdapter<GridItem> {
             holder = (ViewHolder) convertView.getTag();
         }
         GridItem item = mGridData.get(position);
-        holder.textView.setText(item.getTitle());
-        RequestOptions options = new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .fitCenter()
-                .dontAnimate();
-        Glide.with(mContext)
-                .load(item.getImage())
-                .apply(options)
-                .thumbnail(0.1f)
-                .into(holder.imageView);
+        if(null !=item.getTitle()){
+            holder.textView.setText(item.getTitle());
+            RequestOptions options = new RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .fitCenter()
+                    .dontAnimate();
+            Glide.with(mContext)
+                    .load(item.getImage())
+                    .apply(options)
+                    .thumbnail(0.1f)
+                    .into(holder.imageView);
+        }
         return convertView;
     }
 

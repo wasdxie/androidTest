@@ -179,16 +179,14 @@ public class MainActivity extends Activity {
                 //初始化数据源
                 for(int j=0;j<8;j++){
                     int current = j+8*i;
+                    GridItem girdItem = new GridItem();
                     if(current < size){
                         ProductBo productBo = productBos.get(j+8*i);
-                        GridItem girdItem = new GridItem();
                         girdItem.setImage(productBo.getIcon());
                         girdItem.setTitle(productBo.getName());
                         girdItem.setProductBo(productBo);
-                        arrayList.add(girdItem);
-                    }else {
-                        break;
                     }
+                    arrayList.add(girdItem);
                 }
                 GridViewAdapter gridViewAdapter = new GridViewAdapter(this,R.layout.product_page_item,arrayList);
                 gridView.setAdapter(gridViewAdapter);
